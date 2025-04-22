@@ -48,6 +48,24 @@ app.delete("/delete/:id", auth, (req, res, next) => {
   }
 });
 
+app.patch("/update", auth, (req, res, next) => {
+  try {
+    const id = req.body.id;
+    const fooddata = foodmenu.find((item) => item.id === id);
+    if (fooddata) {
+      if (req.body.food) fooddata.food = req.body.food; //these are just reference to object thats why changing these reflex on original object..
+      if (req.body.category) fooddata.category = req.body.category;
+      if (req.body.price) fooddata.price = req.body.price;
+
+      res.status(200).send("succesfully updated");
+    } else {
+      res.send("food data problem");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.listen(6000, () => {
   console.log("listening at port 6000");
 });
