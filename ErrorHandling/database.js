@@ -6,6 +6,7 @@ const { MongoClient } = require("mongodb"); //Mongoclient is a class
 // import { MongoClient } from 'mongodb'
 
 // Connection URL
+// username: after this its find for @ and after it considered all as clustem name...i.e keep the password name without @.. or make the password of @ as %40
 const url =
   "mongodb+srv://coderarmy:7FHkRg9TSemYCE8F@clusterarmy.neoceen.mongodb.net/";
 const client = new MongoClient(url); //creates a object
