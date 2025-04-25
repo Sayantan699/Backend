@@ -36,6 +36,14 @@ const userSchema = new Schema(
 );
 
 const user = mongoose.model("user", userSchema); //It creates a Model class called user that
+
+await user.insertMany([
+  { firstName: "Penakesh" },
+  { lastName: "Penakesh" },
+  { age: 19 },
+  { gender: male },
+  { password: "6659@da4few_dxa" },
+]);
 module.exports = user;
 
 /*const mongoose = require("mongoose");

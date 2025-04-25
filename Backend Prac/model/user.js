@@ -29,4 +29,12 @@ const userformat = new Schema({
 
 const user = mongoose.model("user", userformat); //class create huya
 
+await user.insertMany([
+  { firstName: "Penakesh" },
+  { lastName: "Baidya" },
+  { age: 19 },
+  { gender: male },
+  { email: "penakesh@gmail.com" },
+]);
+
 module.exports = user;
