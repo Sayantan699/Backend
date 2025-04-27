@@ -88,7 +88,7 @@ app.patch("/user", async (req, res) => {
 
 main()
   .then(async () => {
-    console.log("Connected to DB");
+    console.log("Connected to DB"); // at first connect to db then listen to server
     app.listen(6500, () => {
       console.log("Listening at port 6500");
     });

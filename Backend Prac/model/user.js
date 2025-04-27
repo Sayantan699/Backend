@@ -11,9 +11,9 @@ const userformat = new Schema(
       unique: true,
     },
     gender: {
-      type: Male,
+      type: String,
       required: true,
-      enum: ["male", "female", "others"], //only with these 3 option selected as gender will be registered to database..
+      enum: ["male", "female", "others"],
     },
     age: {
       type: Number,
@@ -30,20 +30,30 @@ const userformat = new Schema(
   { timestamps: true }
 );
 
-const user = mongoose.model("user", userformat); //class create huya
+const user = mongoose.model("user", userformat);
 
-await user.insertMany([
-  { name: "Penakesh" },
-  { age: 19 },
-  { gender: male },
-  { email: "penakesh@gmail.com" },
-]);
+async function insertuser() {
+  try {
+    await user.insertMany([
+      {
+        name: "Penakesh",
+        age: 19,
+        gender: "male",
+        email: "penakesh@gmail.com",
+      },
+    ]);
 
-const usernew = new user({
-  name: "Rahul",
-  age: 19,
-  email: "rahul69@gmail.com",
-  gender: "Male",
-});
+    await user.create({
+      name: "Rahul",
+      age: 19,
+      gender: "male",
+      email: "rahul69@gmail.com",
+    });
 
-module.exports = user;
+    console.log("Data inserted successfully ✅");
+  } catch (error) {
+    console.error("Error inserting data ❌", error.message);
+  }
+}
+
+module.exports = { user, insertuser };
