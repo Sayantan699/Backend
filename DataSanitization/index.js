@@ -14,7 +14,13 @@ app.get("/register", async (req, res) => {
 app.post("/register", async (req, res) => {
   try {
     await user.create(req.body);
-    res.status(200).send("User registered Successfully!!");
+    const mandatoryfield = ["firstname", "lastname", "gender"]; //this is api level validation using these to save the multiple time crud operation in databse thus saving the cost of using database
+    const isAllowed = mandatoryfield.every((k) =>
+      Object.keys(req.body).includes(k)
+    );
+    if (isAllowed) {
+      res.status(200).send("User registered Successfully!!");
+    } else throw new Error("Mandatory Field Missing");
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
