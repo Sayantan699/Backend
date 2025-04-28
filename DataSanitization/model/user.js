@@ -20,6 +20,10 @@ const userschema = new Schema({
     type: String,
     required: true,
     enum: ["male", "female", "others"],
+    validate(value) {
+      if (!["male", "female", "others"].includes(value))
+        throw new Error("Invalid Gender");
+    },
   },
   emailid: {
     type: String,

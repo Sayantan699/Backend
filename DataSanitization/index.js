@@ -39,10 +39,15 @@ app.delete("/user/:id", async (req, res) => {
   }
 });
 
-app.patch("/user/:id", async (req, res) => {
+app.patch("/user", async (req, res) => {
+  //API level validation
   try {
-    const result = await user.findByIdAndUpdate(req.params.id);
-    res.send(result);
+    const { _id, ...update } = req.body; //destructuing the object to extract the id and update the following given in req.body based upon the unique id
+    const result = await user.findByIdAndUpdate(_id, update, {
+      //we have to manually validate while updating
+      runValidators: true,
+    });
+    res.send("Update succesfully");
   } catch (err) {
     res.send("Error" + err.message);
   }
