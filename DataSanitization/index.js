@@ -1,5 +1,8 @@
 const main = require("./database");
 const { user } = require("./model/user");
+const validuser = require("./utils/validateuser");
+const validateuser = require("./utils/validateuser");
+const bcrypt = require("bcrypt");
 const express = require("express");
 
 const app = express();
@@ -14,17 +17,31 @@ app.get("/register", async (req, res) => {
 app.post("/register", async (req, res) => {
   try {
     await user.create(req.body);
-    const mandatoryfield = ["firstname", "lastname", "gender"]; //this is api level validation using these to save the multiple time crud operation in databse thus saving the cost of using database
+    /*const mandatoryfield = ["firstname", "lastname", "gender"]; //this is api level validation using these to save the multiple time crud operation in databse thus saving the cost of using database
     const isAllowed = mandatoryfield.every((k) =>
       Object.keys(req.body).includes(k)
-    );
-    if (isAllowed) {
+    );*/
+    validuser(req.body);
+    /*if (isAllowed) {
       res.status(200).send("User registered Successfully!!");
-    } else throw new Error("Mandatory Field Missing");
+    } else throw new Error("Mandatory Field Missing");*/
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
+});
+
+app.post("/login", async (req, res) => {
+  const people = user.findById(req.body._id);
+
+  if (!(req.body.emailid === people.body.emailid))
+    throw new Error("Invalid Credentials");
+
+  const isAllowed = await bcrypt.compare(req.body.password, people.password);
+
+  if (!isAllowed) throw new Error("Invalid Credentials");
+
+  res.send("Login Succesfull");
 });
 
 app.get("/user/:id", async (req, res) => {
