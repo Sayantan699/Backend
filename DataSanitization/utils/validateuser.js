@@ -5,13 +5,13 @@ function validuser(data) {
   const isAllowed = mandatoryfield.every((k) => Object.keys(data).includes(k));
 
   if (!isAllowed) throw new Error("Fields Missing");
-  if (!validator.isEmail(data.emailId)) throw new Error("Invalid Email");
+  if (!validator.isEmail(data.emailid)) throw new Error("Invalid Email");
 
   if (!validator.isStrongPassword(data.password))
-    throw new Error("Week Password");
+    throw new Error("Weak Password");
 
-  if (!(data.firstName.length >= 3 && data.firstName.length <= 20))
-    throw new Error("Name should have atleast 3 char and atmost 20 char");
+  if (!(data.firstname.length >= 3 && data.firstname.length <= 20))
+    throw new Error("Name should have at least 3 and at most 20 characters");
 }
 
 module.exports = validuser;

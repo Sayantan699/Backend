@@ -16,6 +16,10 @@ app.get("/register", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
+    const salt = await bcrypt.genSalt(10); // 10 is a good default
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    req.body.password = hashedPassword;
     await user.create(req.body);
     /*const mandatoryfield = ["firstname", "lastname", "gender"]; //this is api level validation using these to save the multiple time crud operation in databse thus saving the cost of using database
     const isAllowed = mandatoryfield.every((k) =>
@@ -32,16 +36,29 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const people = user.findById(req.body._id);
+  try {
+    const people = await user.findById(req.body._id); // await here
 
-  if (!(req.body.emailid === people.body.emailid))
-    throw new Error("Invalid Credentials");
+    if (!people) {
+      return res.status(404).send("User not found");
+    }
 
-  const isAllowed = await bcrypt.compare(req.body.password, people.password);
+    if (req.body.emailid !== people.emailid) {
+      return res.status(401).send("Invalid email");
+    }
 
-  if (!isAllowed) throw new Error("Invalid Credentials");
+    const isAllowed = await bcrypt.compare(req.body.password, people.password);
 
-  res.send("Login Succesfull");
+    if (!isAllowed) {
+      return res.status(401).send("Invalid password");
+    }
+
+    res.cookie("token", "abcdefghijkl"); // optional
+    res.send("Login Successful");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.get("/user/:id", async (req, res) => {
