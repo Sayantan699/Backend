@@ -4,10 +4,12 @@ const validuser = require("./utils/validateuser");
 const validateuser = require("./utils/validateuser");
 const bcrypt = require("bcrypt");
 const express = require("express");
+const cookieparser = require("cookie-parser");
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieparser());
 
 app.get("/register", async (req, res) => {
   const ans = await user.find({});
@@ -54,11 +56,19 @@ app.post("/login", async (req, res) => {
     }
 
     res.cookie("token", "abcdefghijkl"); // optional
+    console.log(req.cookies);
     res.send("Login Successful");
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
+});
+
+app.get("/check", (req, res) => {
+  //Use Postman or a browser to perform the /login request.Then, make another request (e.g., to /register or a test route like /check) and log req.cookies
+
+  console.log("Cookies received:", req.cookies);
+  res.send(req.cookies);
 });
 
 app.get("/user/:id", async (req, res) => {
