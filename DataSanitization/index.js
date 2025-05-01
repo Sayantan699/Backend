@@ -5,6 +5,7 @@ const validateuser = require("./utils/validateuser");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const cookieparser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 
@@ -39,7 +40,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const people = await user.findById(req.body._id); // await here
+    const people = await user.findOne({ emailId: req.body.emailId }); // await here
 
     if (!people) {
       return res.status(404).send("User not found");
@@ -55,20 +56,36 @@ app.post("/login", async (req, res) => {
       return res.status(401).send("Invalid password");
     }
 
-    res.cookie("token", "abcdefghijkl"); // optional
+    //token
+    const token = jwt.sign(
+      { _id: people._id, emailid: people.emailid },
+      "SayantanKey",
+      { expiresIn: 10 }
+    ); //Payload and key... payload should not contain any important credentianls as its only encoded 64bit format
+
+    res.cookie("token", token); // optional
     console.log(req.cookies);
     res.send("Login Successful");
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send(err.message);
   }
 });
 
-app.get("/check", (req, res) => {
+app.get("/check", async (req, res) => {
   //Use Postman or a browser to perform the /login request.Then, make another request (e.g., to /register or a test route like /check) and log req.cookies
 
-  console.log("Cookies received:", req.cookies);
-  res.send(req.cookies);
+  try {
+    // validate the user first
+
+    const payload = jwt.verify(req.cookies.token, "SayantanKey");
+    console.log(payload);
+    const result = await user.find();
+
+    res.send(result);
+  } catch (err) {
+    res.send("Error" + err.message);
+  }
 });
 
 app.get("/user/:id", async (req, res) => {
