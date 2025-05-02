@@ -1,7 +1,7 @@
 const main = require("./database");
 const { user } = require("./model/user");
 const validuser = require("./utils/validateuser");
-const validateuser = require("./utils/validateuser");
+//const validateuser = require("./utils/validateuser");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const cookieparser = require("cookie-parser");
@@ -40,7 +40,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const people = await user.findOne({ emailId: req.body.emailId }); // await here
+    const people = await user.findOne({ emailid: req.body.emailid }); // await here
 
     if (!people) {
       return res.status(404).send("User not found");
