@@ -57,11 +57,13 @@ app.post("/login", async (req, res) => {
     }
 
     //token
-    const token = jwt.sign(
+    /*const token = jwt.sign(
       { _id: people._id, emailid: people.emailid },
       "SayantanKey",
       { expiresIn: 10 }
-    ); //Payload and key... payload should not contain any important credentianls as its only encoded 64bit format
+    ); //Payload and key... payload should not contain any important credentianls as its only encoded 64bit format*/
+
+    const token = people.getjwt();
 
     res.cookie("token", token); // optional
     console.log(req.cookies);

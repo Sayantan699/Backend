@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 const { Schema } = mongoose;
 
 const userschema = new Schema({
@@ -42,6 +43,18 @@ const userschema = new Schema({
   },
 });
 
-const user = mongoose.model("user", userschema);
+userschema.methods.getjwt = function () {
+  const ans = jwt.sign(
+    { _id: this._id, emailid: this.emailid }, //this because this points to the parent object people
+    "SayantanKey",
+    {
+      expiresIn: 10,
+    }
+  );
+
+  return ans;
+};
+
+const user = mongoose.model("user", userschema); //creating a class
 
 module.exports = { user };
