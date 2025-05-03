@@ -7,6 +7,7 @@ const express = require("express");
 const cookieparser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const authrouter = require("./routes/authapi");
 
 const app = express();
 
