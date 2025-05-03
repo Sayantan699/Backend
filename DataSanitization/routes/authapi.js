@@ -1,6 +1,8 @@
 const express = require("express");
-const { user } = require("./model/user");
+const { user } = require("../model/user");
+
 const bcrypt = require("bcrypt");
+const validuser = require("../utils/validateuser");
 const authrouter = express.Router();
 
 authrouter.post("/register", async (req, res) => {
