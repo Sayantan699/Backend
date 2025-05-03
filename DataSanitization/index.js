@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 const cookieparser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const app = express();
 
@@ -125,7 +126,7 @@ app.patch("/user", async (req, res) => {
 main()
   .then(() => {
     console.log("Connected to Database");
-    app.listen(5900, () => {
+    app.listen(process.env.PORT, () => {
       console.log("In 5900 port");
     });
   })

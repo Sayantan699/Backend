@@ -46,7 +46,7 @@ const userschema = new Schema({
 userschema.methods.getjwt = function () {
   const ans = jwt.sign(
     { _id: this._id, emailid: this.emailid }, //this because this points to the parent object people
-    "SayantanKey",
+    process.env.SECRET_KEY,
     {
       expiresIn: 10,
     }
