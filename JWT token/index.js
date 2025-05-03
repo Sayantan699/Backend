@@ -35,16 +35,13 @@ app.post("/login", async (req, res) => {
     // if(!(req.body.emailId===people.emailId))
     //     throw new Error("Invalid credentials");
 
-    const IsAllowed = await bcrypt.compare(req.body.password, people.password);
+    const IsAllowed = verifyPassword(req.body.password);
 
     if (!IsAllowed) throw new Error("Invalid credentials");
 
     // jwt token
 
-    const token = jwt.sign(
-      { _id: people._id, emailId: people.emailId },
-      "Rohit@13412$"
-    );
+    const token = people.getjwt();
 
     res.cookie("token", token);
     res.send("Login Successfully");
