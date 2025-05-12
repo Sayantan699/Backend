@@ -62,4 +62,13 @@ authrouter.post("/login", async (req, res) => {
   }
 });
 
+authrouter.post("/logout", async (req, res) => {
+  try {
+    //res.cookie("token", "jhgfttrosfk"); // this just changes the token so that user can't login with the previous tume
+    res.cookie("token", null, { expires: new Date(Date.now()) });
+    res.send("Log Out Succuessfully!!");
+  } catch (err) {
+    console.log(err.message);
+  }
+});
 module.exports = authrouter;
